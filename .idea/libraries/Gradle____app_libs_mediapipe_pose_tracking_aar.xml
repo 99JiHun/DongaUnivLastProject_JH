@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ./app/libs/mediapipe_pose_tracking.aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/83aa41ec5494cdac34854c67e3b47a68/mediapipe_pose_tracking/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/83aa41ec5494cdac34854c67e3b47a68/mediapipe_pose_tracking/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/83aa41ec5494cdac34854c67e3b47a68/mediapipe_pose_tracking/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,5 +1,6 @@
 package com.example.mediapipeposetracking;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -14,6 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.formats.proto.LandmarkProto.NormalizedLandmark;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String OUTPUT_LANDMARKS_STREAM_NAME = "pose_landmarks";
 
    // private static final CameraHelper.CameraFacing CAMERA_FACING = CameraHelper.CameraFacing.FRONT;
-    private static final CameraHelper.CameraFacing CAMERA_FACING = CameraHelper.CameraFacing.BACK;
+    private static final CameraHelper.CameraFacing CAMERA_FACING = CameraHelper.CameraFacing.FRONT;
     // Flips the camera-preview frames vertically before sending them into FrameProcessor to be
     // processed in a MediaPipe graph, and flips the processed frames back when they are displayed.
     // This is needed because OpenGL represents images assuming the image origin is at the bottom-left
@@ -74,11 +76,17 @@ public class MainActivity extends AppCompatActivity {
     private ApplicationInfo applicationInfo;
     // Handles camera access via the {@link CameraX} Jetpack support library.
     private CameraXPreviewHelper cameraHelper;
-
+    NormalizedLandmarkList[] landmarkListArr = new NormalizedLandmarkList[30];
+    int size = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewLayoutResId());
+        Intent preIntent = getIntent();
+
+        int data = preIntent.getIntExtra("ex",-1);
+        Log.d(TAG,"data is" + data);
+        String bInfo = preIntent.getStringExtra("info");
 
         try {
             applicationInfo =
@@ -123,6 +131,25 @@ public class MainActivity extends AppCompatActivity {
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         try {
                             NormalizedLandmarkList landmarks = NormalizedLandmarkList.parseFrom(landmarksRaw);
+                            if(size==30){
+                                //여기
+                                if(data == 0){
+                                    System.out.println("squat");
+
+                                }
+                                else if(data == 1){
+                                    System.out.println("bench");
+                                }
+                                else if(data == 2){
+                                    System.out.println("deadlift");
+                                }
+                                else{
+
+                                }
+                                size = 0;
+                            }else{
+                                landmarkListArr[size++] = landmarks;
+                            }
                             if (landmarks == null) {
                                 Log.v(TAG, "[TS:" + packet.getTimestamp() + "] No iris landmarks.");
                                 return;
@@ -166,6 +193,11 @@ public class MainActivity extends AppCompatActivity {
     // have a custom layout, override this method and return the custom layout.
     protected int getContentViewLayoutResId() {
         return R.layout.activity_main;
+    }
+
+    public void goToHomeActivity(View view){
+        Intent intent = new Intent(this, home.class);
+        startActivity(intent);
     }
 
     @Override

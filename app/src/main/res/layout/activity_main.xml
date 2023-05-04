@@ -16,4 +16,16 @@
             android:gravity="center"
             android:text="@string/no_camera_access" />
     </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:gravity="bottom"
+        >
+    <Button
+        android:id="@+id/squat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Home Activity"
+        android:onClick="goToHomeActivity" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
