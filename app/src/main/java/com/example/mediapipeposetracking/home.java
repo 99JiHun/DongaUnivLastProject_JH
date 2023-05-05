@@ -32,6 +32,7 @@ public class home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index);
+
         Button button1 = findViewById(R.id.squat);
         Button button2 = findViewById(R.id.bench);
         Button button3 = findViewById(R.id.deadlift);
