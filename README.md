@@ -19,3 +19,5 @@ The binarypb is in the folder
    > https://developers.google.com/ml-kit/vision/pose-detection
 
 3. After my testing, the current Mediapipe pose detection model is more accurate than ML Kit even if Google said ML Kit also uses BlazePose.
+
+Here is the basic source : https://github.com/yuxiaohui78/Mediapipe-android-pose-tracking
