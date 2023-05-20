@@ -76,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
     private ApplicationInfo applicationInfo;
     // Handles camera access via the {@link CameraX} Jetpack support library.
     private CameraXPreviewHelper cameraHelper;
-    NormalizedLandmarkList[] landmarkListArr = new NormalizedLandmarkList[30];
+
     int frameSize = 0;
+    int landmarksSize = 6;
+    NormalizedLandmarkList[] landmarkListArr = new NormalizedLandmarkList[landmarksSize];
+    humanPose own = new humanPose();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,11 +143,13 @@ public class MainActivity extends AppCompatActivity {
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         try {
                             NormalizedLandmarkList landmarks = NormalizedLandmarkList.parseFrom(landmarksRaw);
-                            if(frameSize==30){
+                            if(frameSize==landmarksSize){
+                                sideAdapter.isSide(landmarkListArr);
                                 //여기
+//                                Log.v("exrcise",String.valueOf(own.count));
                                 if(exrciseData == 0){
                                     System.out.println("squat");
-
+                                    exrciseAdapter.isStand(landmarkListArr,own.sit);
                                 }
                                 else if(exrciseData == 1){
                                     System.out.println("bench");
@@ -162,17 +167,17 @@ public class MainActivity extends AppCompatActivity {
                                 landmarkListArr[frameSize++] = landmarks;
                             }
                             if (landmarks == null) {
-                                Log.v(TAG, "[TS:" + packet.getTimestamp() + "] No iris landmarks.");
+//                                Log.v(TAG, "[TS:" + packet.getTimestamp() + "] No iris landmarks.");
                                 return;
                             }
                             // Note: If eye_presence is false, these landmarks are useless.
-                            Log.v(
-                                    TAG,
-                                    "[TS:"
-                                            + packet.getTimestamp()
-                                            + "] #Landmarks for iris: "
-                                            + landmarks.getLandmarkCount());
-                            Log.v(TAG, getLandmarksDebugString(landmarks));
+//                            Log.v(
+//                                    TAG,
+//                                    "[TS:"
+//                                            + packet.getTimestamp()
+//                                            + "] #Landmarks for iris: "
+//                                            + landmarks.getLandmarkCount());
+//                            Log.v(TAG, getLandmarksDebugString(landmarks));
                         } catch (InvalidProtocolBufferException e) {
                             Log.e(TAG, "Couldn't Exception received - " + e);
                             return;
