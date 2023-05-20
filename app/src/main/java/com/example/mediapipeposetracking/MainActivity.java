@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String INPUT_VIDEO_STREAM_NAME = "input_video";
     private static final String OUTPUT_VIDEO_STREAM_NAME = "output_video";
     private static final String OUTPUT_LANDMARKS_STREAM_NAME = "pose_landmarks";
-
+    String cameraSet;
    // private static final CameraHelper.CameraFacing CAMERA_FACING = CameraHelper.CameraFacing.FRONT;
-    private static final CameraHelper.CameraFacing CAMERA_FACING = CameraHelper.CameraFacing.FRONT;
+    private static CameraHelper.CameraFacing CAMERA_FACING;
     // Flips the camera-preview frames vertically before sending them into FrameProcessor to be
     // processed in a MediaPipe graph, and flips the processed frames back when they are displayed.
     // This is needed because OpenGL represents images assuming the image origin is at the bottom-left
@@ -77,16 +77,25 @@ public class MainActivity extends AppCompatActivity {
     // Handles camera access via the {@link CameraX} Jetpack support library.
     private CameraXPreviewHelper cameraHelper;
     NormalizedLandmarkList[] landmarkListArr = new NormalizedLandmarkList[30];
-    int size = 0;
+    int frameSize = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewLayoutResId());
         Intent preIntent = getIntent();
 
-        int data = preIntent.getIntExtra("ex",-1);
-        Log.d(TAG,"data is" + data);
+        cameraSet = preIntent.getStringExtra("cameraSet");
+        int exrciseData = preIntent.getIntExtra("ex",-1);
+
+        Log.d(TAG,"data is" + exrciseData);
         String bInfo = preIntent.getStringExtra("info");
+
+        if(cameraSet.equals("Front")){
+            CAMERA_FACING = CameraHelper.CameraFacing.BACK; //후면 카메라
+        }
+        else{
+            CAMERA_FACING = CameraHelper.CameraFacing.FRONT; //전면 카메라
+        }
 
         try {
             applicationInfo =
@@ -131,24 +140,26 @@ public class MainActivity extends AppCompatActivity {
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         try {
                             NormalizedLandmarkList landmarks = NormalizedLandmarkList.parseFrom(landmarksRaw);
-                            if(size==30){
+                            if(frameSize==30){
                                 //여기
-                                if(data == 0){
+                                if(exrciseData == 0){
                                     System.out.println("squat");
 
                                 }
-                                else if(data == 1){
+                                else if(exrciseData == 1){
                                     System.out.println("bench");
+
                                 }
-                                else if(data == 2){
+                                else if(exrciseData == 2){
                                     System.out.println("deadlift");
+
                                 }
                                 else{
 
                                 }
-                                size = 0;
+                                frameSize = 0;
                             }else{
-                                landmarkListArr[size++] = landmarks;
+                                landmarkListArr[frameSize++] = landmarks;
                             }
                             if (landmarks == null) {
                                 Log.v(TAG, "[TS:" + packet.getTimestamp() + "] No iris landmarks.");

@@ -19,11 +19,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:label="mainActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.example.mediapipeposetracking.home"
@@ -40,10 +35,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:label="explainText">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 </manifest>

@@ -14,10 +14,10 @@ public class explainText extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.explain);
-        Button button = findViewById(R.id.apt);
         Intent preIntent = getIntent();
         Intent intent = new Intent(this, MainActivity.class);
-
+        Button btnFront = findViewById(R.id.front);
+        Button btnBack = findViewById(R.id.back);
         TextView textView = findViewById(R.id.text_view);
 
         int data = preIntent.getIntExtra("ex",-1);
@@ -26,13 +26,20 @@ public class explainText extends AppCompatActivity {
         intent.putExtra("ex",data);
         intent.putExtra("info",bInfo);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        btnFront.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                intent.putExtra("cameraSet","Front");
                 startActivity(intent);
             }
         });
-
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent.putExtra("cameraSet","Back");
+                startActivity(intent);
+            }
+        });
 
     }
 
