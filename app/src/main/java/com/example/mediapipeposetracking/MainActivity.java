@@ -16,6 +16,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.formats.proto.LandmarkProto.NormalizedLandmark;
@@ -78,18 +79,18 @@ public class MainActivity extends AppCompatActivity {
     private CameraXPreviewHelper cameraHelper;
 
     int frameSize = 0;
-    int landmarksSize = 6;
+    int landmarksSize = 2;
     NormalizedLandmarkList[] landmarkListArr = new NormalizedLandmarkList[landmarksSize];
-    humanPose own = new humanPose();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewLayoutResId());
         Intent preIntent = getIntent();
-
+        humanPose own = new humanPose();
         cameraSet = preIntent.getStringExtra("cameraSet");
         int exrciseData = preIntent.getIntExtra("ex",-1);
-
+        TextView countView = findViewById(R.id.countText);
         Log.d(TAG,"data is" + exrciseData);
         String bInfo = preIntent.getStringExtra("info");
 
@@ -146,7 +147,19 @@ public class MainActivity extends AppCompatActivity {
                             if(frameSize==landmarksSize){
                                 sideAdapter.isSide(landmarkListArr);
                                 //여기
-//                                Log.v("exrcise",String.valueOf(own.count));
+                                Log.v("exercise",String.valueOf(own.count));
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String sitOrStand = own.sit ? (!own.stand ? "sit" : "err") : "stand";
+                                        String bad = own.bad ? "bad" : "good";
+                                        String dataSet = Integer.toString(own.count) + " " + sitOrStand + " " + bad;
+                                        countView.setText(dataSet);
+                                        countView.invalidate();
+                                    }
+                                });
+
                                 if(exrciseData == 0){
                                     System.out.println("squat");
                                     exrciseAdapter.isStand(landmarkListArr,own.sit);
@@ -232,12 +245,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        converter.close();
 
         // Hide preview display until we re-open the camera again.
         previewDisplayView.setVisibility(View.GONE);
     }
-
+    @Override
+    protected void onStop(){
+        super.onStop();
+        converter.close();
+        cameraHelper = null;
+        processor.getVideoSurfaceOutput().setSurface(null);
+        processor.close(); //bitmap 메모리 해제 하는거같음
+    }
     @Override
     public void onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {

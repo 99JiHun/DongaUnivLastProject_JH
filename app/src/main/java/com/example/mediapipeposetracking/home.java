@@ -1,73 +1,63 @@
 package com.example.mediapipeposetracking;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 
 import java.io.Serializable;
 
 
+
+
 public class home extends AppCompatActivity {
-//    public static class ButtonInfo implements Serializable {
-//        private int buttonId;
-//        private String description;
-//
-//        public ButtonInfo(int buttonId, String description) {
-//            this.buttonId = buttonId;
-//            this.description = description;
-//        }
-//
-//        public int getButtonId() {
-//            return buttonId;
-//        }
-//
-//        public String getDescription() {
-//            return description;
-//        }
-//    }
+
+    private String[] dataInfo;
+    private Button[] buttons = new Button[3];
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index);
 
-        Button button1 = findViewById(R.id.squat);
-        Button button2 = findViewById(R.id.bench);
-        Button button3 = findViewById(R.id.deadlift);
-        String buInfo1 = "squatInfo";
-        String buInfo2 = "benchInfo";
-        String buInfo3 = "deadliftInfo";
-//        ButtonInfo buInfo1 = new ButtonInfo(R.id.squat,"squatInfo");
-//        ButtonInfo buInfo2 = new ButtonInfo(R.id.bench,"benchInfo");
-//        ButtonInfo buInfo3 = new ButtonInfo(R.id.deadlift,"deadliftInfo");
+        buttons[0] = findViewById(R.id.squat);
+        buttons[1] = findViewById(R.id.bench);
+        buttons[2] = findViewById(R.id.deadlift);
+
+        dataInfo = getResources().getStringArray(R.array.exerciseInfo);
 
         Intent intent = new Intent(this, explainText.class);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.putExtra("ex",0);
-                intent.putExtra("info",buInfo1);
-                startActivity(intent);
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.putExtra("ex",1);
-                intent.putExtra("info",buInfo2);
-                startActivity(intent);
-            }
-        });
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.putExtra("ex",2);
-                intent.putExtra("info",buInfo3);
-                startActivity(intent);
-            }
-        });
+
+
+
+
+        for(int i=0;i<dataInfo.length;i++){
+            final int index = i;
+            buttons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    intent.putExtra("ex",index);
+                    intent.putExtra("info",dataInfo[index]);
+                    intent.putExtra("resId",index);
+                    //여기에 버튼에 따른 drawable 이미지 할당 필요함
+
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
     @Override

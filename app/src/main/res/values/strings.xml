@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">LFIT</string>
     <string name="no_camera_access" translatable="false">Please grant camera permissions.</string>
+    <string-array name="exerciseInfo">
+        <item>스쿼트 정보 출력 스트링에서 들고온거</item>
+        <item>벤치프레스 정보 출력 스트링에서 들고온거</item>
+        <item>데드리프트 정보 출력 스트링에서 들고온거</item>
+    </string-array>
 </resources>
